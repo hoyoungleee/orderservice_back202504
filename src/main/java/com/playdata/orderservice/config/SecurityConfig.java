@@ -39,7 +39,7 @@ public class SecurityConfig {
 
         // 요청 권한 설정(어떤 url이냐에 따라 검사를 할 지 말지를 결정)
         http.authorizeHttpRequests(auth ->{
-            auth.requestMatchers("/user/create","/user/doLogin").permitAll()
+            auth.requestMatchers("/user/create","/user/doLogin","/product/list").permitAll()
                     .anyRequest().authenticated();
         });
         // "/user/create","/user/login"은 인증검사가 필요없다고 설정했고,
