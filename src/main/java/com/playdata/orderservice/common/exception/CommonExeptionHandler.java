@@ -4,6 +4,7 @@ import com.playdata.orderservice.common.dto.CommonErrorDto;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -39,4 +40,11 @@ public class CommonExeptionHandler {
         return new ResponseEntity<>(errorDto, HttpStatus.INTERNAL_SERVER_ERROR); //500에러
     }
 
+    // 특정 권한을 가지지 못한 사용자가 요청을 보냈을 때 내쫒는 메서드
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<?> EntityNotFoundHandler(AuthorizationDeniedException e){
+        e.printStackTrace();
+        CommonErrorDto errorDto = new CommonErrorDto(HttpStatus.FORBIDDEN, e.getMessage());
+        return new ResponseEntity<>(errorDto, HttpStatus.FORBIDDEN);
+    }
 }

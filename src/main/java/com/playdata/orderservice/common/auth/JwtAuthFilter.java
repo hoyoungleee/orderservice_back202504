@@ -56,6 +56,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                         "", // 인증된 사용자의 비밀번호 : 보통null 혹은 빈문자열
                         authorityList // 인가 정보 (권한)
                 );
+
+                System.out.println("auth = " + auth);
+
+
                 // 시큐리티 컨테이너에 인증 정보 객체를 등록.
                 // 인증 정보를 전역적으로 어느 컨테이너, 어느 서비스에서나 활용할 수 있도록 미리 저장.
                 SecurityContextHolder.getContext().setAuthentication(auth);
