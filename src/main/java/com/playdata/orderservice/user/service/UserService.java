@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class UserService {
     // 서비스는 repository에 의존하고 있다. -> repository의 기능을 써야한다.
     // repository 객체를 자동으로 주입받자. (JPA가 만들어서 컨테이너에 등록해 놓음)
     private final UserRepository userRepository;
+    private final PasswordEncoder encoder;
 
     // 컨트롤러가 이 메서드를 호출할 것이다.
     // 그리고 지가 전달 받은 dto를 그대로 넘길 것이다.
@@ -39,7 +41,7 @@ public class UserService {
 
         // 이메일 중복 안됨 -> 회원가입 진행하자.
         // dto를 entity로 변환하는 로직이 필요!
-        User user = dto.toEntity();
+        User user = dto.toEntity(encoder);
         User saved = userRepository.save(user);
         return saved;
     }
@@ -50,8 +52,8 @@ public class UserService {
                 () -> new EntityNotFoundException("User not found")
         );
 
-        //비밀번호 확인하기
-        if(!user.getPassword().equals(dto.getPassword())){
+        //비밀번호 확인하기(암호화 되어있으니 encoder에게 부탁
+        if(!encoder.matches((dto.getPassword()), user.getPassword())){
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
