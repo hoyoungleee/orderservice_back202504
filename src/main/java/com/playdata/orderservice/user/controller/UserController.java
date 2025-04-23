@@ -1,8 +1,9 @@
 package com.playdata.orderservice.user.controller;
 
-import com.playdata.orderservice.JwtTokenProvider;
+import com.playdata.orderservice.common.auth.JwtTokenProvider;
 import com.playdata.orderservice.common.dto.CommonResDto;
 import com.playdata.orderservice.user.dto.UserLoginReqDto;
+import com.playdata.orderservice.user.dto.UserResDto;
 import com.playdata.orderservice.user.dto.UserSaveDto;
 import com.playdata.orderservice.user.entity.User;
 import com.playdata.orderservice.user.service.UserService;
@@ -10,10 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user") // user 관련 요청은 /user로 시작한다고 가정.
@@ -58,10 +56,18 @@ public class UserController {
         // 로그인 유지를 해주고 싶다.
         // 백엔드는 요청이 들어왔을 때 이 사람이 이전에 로그인 한사람인지 알 수가 없다.
         // 징표를 하나 만들어 주겠다. -> JWT를 발급해서 클라이언트에게 전달해 주겠다!
-        String token = jwtTokenProvider.createToken(user.getEmail(), user.getPassword());
+        String token = jwtTokenProvider.createToken(user.getEmail(), user.getRole().toString());
         CommonResDto resDto = new CommonResDto(HttpStatus.OK, "Login Success", token);
 
 
+        return new ResponseEntity<>(resDto, HttpStatus.OK);
+    }
+
+    // 회원 정보 조회 (마이페이지) -> 로그인 한 회원만이 요청할 수 있습니다.
+    @GetMapping("/myInfo")
+    public ResponseEntity<?> getMyInfo(){
+        UserResDto dto = userService.myInfo();
+        CommonResDto resDto = new CommonResDto(HttpStatus.OK, "My Info 조회 성공", dto);
         return new ResponseEntity<>(resDto, HttpStatus.OK);
     }
 }
