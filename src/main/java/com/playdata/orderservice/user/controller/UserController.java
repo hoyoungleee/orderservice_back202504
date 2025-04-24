@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -61,9 +62,14 @@ public class UserController {
         // 백엔드는 요청이 들어왔을 때 이 사람이 이전에 로그인 한사람인지 알 수가 없다.
         // 징표를 하나 만들어 주겠다. -> JWT를 발급해서 클라이언트에게 전달해 주겠다!
         String token = jwtTokenProvider.createToken(user.getEmail(), user.getRole().toString());
-        CommonResDto resDto = new CommonResDto(HttpStatus.OK, "Login Success", token);
 
+        //Map을 이용해서 사용자의 id와 token을 포장하자.
+        HashMap<String , Object> loginInfo = new HashMap<>();
+        loginInfo.put("token", token);
+        loginInfo.put("id", user.getId());
+        loginInfo.put("role", user.getRole().toString());
 
+        CommonResDto resDto = new CommonResDto(HttpStatus.OK, "Login Success", loginInfo);
         return new ResponseEntity<>(resDto, HttpStatus.OK);
     }
 
