@@ -27,7 +27,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 //        response.getWriter().write("{\"error\":\"invalidtoken}\"}");
         //Map 생성 및 데이터 추가 (JSON을 간편하게 즉석에서 만들자)
         Map<String, Object> responseMap = new HashMap<>();
-        responseMap.put("message", "No Login");
+        responseMap.put("message", "NO_LOGIN");
         responseMap.put("code", "401");
 
         //Map을 json 문자열로 변환

@@ -2,24 +2,26 @@ package com.playdata.orderservice.ordering.entity;
 
 import com.playdata.orderservice.product.entity.Product;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
 public class OrderDetail {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private int quantity;
 
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="product_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
     private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -27,3 +29,10 @@ public class OrderDetail {
     private Ordering ordering;
 
 }
+
+
+
+
+
+
+

@@ -93,4 +93,16 @@ public class UserService {
 
         return dtoList;
     }
+
+    public void saveRefreshToken(String refreshToken) {
+
+    }
+
+    public User findById(String id) {
+        User user = userRepository.findById(Long.parseLong(id)).orElseThrow(
+                () -> new EntityNotFoundException("User not found")
+        );
+
+        return user;
+    }
 }

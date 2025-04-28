@@ -5,13 +5,12 @@ import com.playdata.orderservice.product.dto.ProductResDto;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Getter
-@ToString
+@Getter @ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name="tbl_product")
+@Table(name = "tbl_product")
 public class Product extends BaseTimeEntity {
 
     @Id
@@ -21,19 +20,26 @@ public class Product extends BaseTimeEntity {
     private String name;
     private String category;
     private int price;
+    @Setter
     private int stockQuantity;
-    @Setter //이미지 경로만 setter 세팅
+    @Setter // 이미지 경로를 위해서만 setter 세팅
     private String imagePath;
 
-    public ProductResDto toProductResDto() {
-        ProductResDto resDto = new ProductResDto().builder()
-                .id(this.id)
-                .name(this.name)
-                .category(this.category)
-                .price(this.price)
-                .stockQuantity(this.stockQuantity)
-                .imagePath(this.imagePath)
+    public ProductResDto fromEntity() {
+        return ProductResDto.builder()
+                .id(id)
+                .name(name)
+                .category(category)
+                .price(price)
+                .stockQuantity(stockQuantity)
+                .imagePath(imagePath)
                 .build();
-        return resDto;
     }
+
 }
+
+
+
+
+
+

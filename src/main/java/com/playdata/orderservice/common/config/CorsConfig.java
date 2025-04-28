@@ -1,4 +1,4 @@
-package com.playdata.orderservice.config;
+package com.playdata.orderservice.common.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

@@ -32,7 +32,7 @@ public class ProductService {
         String uniqueFileName = UUID.randomUUID()+"_"+ productImage.getOriginalFilename();
 
         // 특정 로컬 경로에 이미지를 전송하고, 그 경로를 Entity에 세팅하자.
-        File file = new File("C:\\Users\\ghdud\\Desktop\\Backend\\orderservice_back202504\\upload\\" + uniqueFileName);
+        File file = new File("/Users/hoyeong-i/Desktop/FRONTEND/orderservice_front/src/assets/upload" + uniqueFileName);
 
         try {
             productImage.transferTo(file);
@@ -49,7 +49,7 @@ public class ProductService {
     public List<ProductResDto> productSelect(Pageable pageable) {
         Page<Product> products = productRepository.findAll(pageable);
 
-        List<ProductResDto> dtos = products.stream().map(Product::toProductResDto).collect(Collectors.toList());
+        List<ProductResDto> dtos = products.stream().map(Product::fromEntity).collect(Collectors.toList());
 
         return dtos;
     }

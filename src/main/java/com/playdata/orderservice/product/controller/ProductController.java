@@ -27,7 +27,8 @@ public class ProductController {
     //상품 등록 요청
     @PreAuthorize(("hasRole('ADMIN')"))
     @PostMapping("/create")
-    public ResponseEntity<?> createProduct(ProductSaveReqDto dto) {
+
+    public ResponseEntity<?> createProduct( ProductSaveReqDto dto) {
 
          /*
         상품 등록 요청은 여러 데이터와 함께 이미지가 전달될 것입니다.

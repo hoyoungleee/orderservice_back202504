@@ -25,9 +25,11 @@ public class Ordering {
     @JoinColumn(name = "user_id")
     private User user;
 
+
     private OrderStatus orderStatus;
 
     @OneToMany(mappedBy = "ordering", cascade = CascadeType.PERSIST)
-    private List<OrderDetail> orderDetailList;
+    private List<OrderDetail> orderDetails;
+
 
 }

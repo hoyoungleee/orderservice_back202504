@@ -1,10 +1,11 @@
-package com.playdata.orderservice.config;
+package com.playdata.orderservice.common.config;
 
 import com.playdata.orderservice.common.auth.JwtAuthFilter;
 import com.playdata.orderservice.common.exception.CustomAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -39,7 +40,7 @@ public class SecurityConfig {
 
         // 요청 권한 설정(어떤 url이냐에 따라 검사를 할 지 말지를 결정)
         http.authorizeHttpRequests(auth ->{
-            auth.requestMatchers("/user/create","/user/doLogin","/product/list").permitAll()
+            auth.requestMatchers("/user/create","/user/doLogin","/user/refresh","/product/list").permitAll()
                     .anyRequest().authenticated();
         });
         // "/user/create","/user/login"은 인증검사가 필요없다고 설정했고,
@@ -55,6 +56,8 @@ public class SecurityConfig {
             exception.authenticationEntryPoint(customAuthenticationEntryPoint);
         });
 
+
+        http.cors(Customizer.withDefaults()); // 직접 커스텀한 CORS 설정을 적용.
         //설정한 HttpSecurity 객체를 기반으로 시큐리티 설정 구축 및 반환
         return http.build();
     }

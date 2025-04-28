@@ -20,6 +20,12 @@ public class JwtTokenProvider {
     @Value("${jwt.expiration}")
     private int expiration;
 
+
+    @Value("${jwt.secretKeyRt}")
+    private String secretKeyRt;
+    @Value("${jwt.expirationRt}")
+    private int expirationRt;
+
     // 토큰 생성 메서드
      /*
             {
@@ -44,6 +50,22 @@ public class JwtTokenProvider {
                 // 현재 시간 밀리초에 30분을 더한 시간만큼을 만료시간으로 세팅.
                 .setExpiration(new Date(now.getTime() + expiration * 60 * 1000))
                 .signWith(SignatureAlgorithm.HS256, secretKey) // 서명을 어떤 알고리즘으로 암호화 할 지
+                .compact();
+
+    }
+
+    public String createRefreshToken(String email, String role) {
+        // Claims: 페이로드에 들어갈 사용자 정보
+        Claims claims = Jwts.claims().setSubject(email);
+        claims.put("role", role);
+
+        Date now = new Date();
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(now)
+                // 로직은 비슷하지만 수명과 서명이 다릅니다.
+                .setExpiration(new Date(now.getTime() + expirationRt * 60 * 1000))
+                .signWith(SignatureAlgorithm.HS256, secretKeyRt) // 서명을 어떤 알고리즘으로 암호화 할 지
                 .compact();
 
     }
